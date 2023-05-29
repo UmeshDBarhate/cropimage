@@ -21,6 +21,7 @@ const Home = () => {
   };
   const handleRotationChange = (event) => {
     setRotation(parseInt(event.target.value, 10));
+    getCroppedImage(crop)
   };
 
   const handleCropComplete = (crop) => {
@@ -111,7 +112,7 @@ const Home = () => {
                 onComplete={handleCropComplete}
                 
               >
-                <img ref={imageRef} src={selectedImage} alt="" />
+                <img rotation={rotation} style={{ transform: `rotate(${rotation}deg)` }} ref={imageRef} src={selectedImage} alt="" />
               </ReactCrop>
             )}
           </Grid.Column>
@@ -121,7 +122,7 @@ const Home = () => {
                 <h2>Cropped Image:</h2>
                 <Button onClick={handleDownload}>Download</Button>
                 <div className="croppedimg">
-                  <img src={croppedImage} rotation={rotation} style={{ transform: `rotate(${rotation}deg)` }} alt="Cropped" />
+                  <img src={croppedImage}  alt="Cropped" />
                 </div>
               </>
             )}
