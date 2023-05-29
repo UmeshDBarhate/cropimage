@@ -7,9 +7,10 @@ import "../App.css";
 const Home = () => {
   const [crop, setCrop] = useState({ aspect: 1 / 16 });
   const [selectedImage, setSelectedImage] = useState(null);
+  const [rotation, setRotation] = useState(0);
   const [croppedImage, setCroppedImage] = useState(null);
   const inputRef = useRef();
-  const imageRef =useRef()
+  const imageRef = useRef();
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -18,36 +19,40 @@ const Home = () => {
       reader.readAsDataURL(e.target.files[0]);
     }
   };
+  const handleRotationChange = (event) => {
+    setRotation(parseInt(event.target.value, 10));
+  };
 
-  const handleCropComplete = (crop ) => {
-    getCroppedImage(crop );
+  const handleCropComplete = (crop) => {
+    getCroppedImage(crop);
 
     console.log(crop);
   };
 
   const getCroppedImage = (crop) => {
-    
-    const img1 = imageRef.current
-   
+    const img1 = imageRef.current;
+
     console.log(img1.naturalWidth, img1.width, img1.naturalHeight, img1.height);
-    console.log(crop.x)
+    console.log(crop.x);
     const canvas = document.createElement("canvas");
     const scaleX = img1.naturalWidth / img1.width;
     const scaleY = img1.naturalHeight / img1.height;
     canvas.width = crop.width;
     canvas.height = crop.height;
+    
     console.log(canvas.width, canvas.height);
     const ctx = canvas.getContext("2d");
-    
+    ctx.translate(crop.width / 2, crop.height / 2);
+    ctx.rotate((rotation * Math.PI) / 180);
 
     ctx.drawImage(
       img1,
-      crop.x * scaleX,
-      crop.y * scaleY,
+      (crop.x * scaleX),
+      (crop.y * scaleY),
       crop.width * scaleX,
       crop.height * scaleY,
-      0,
-      0,
+      -crop.width / 2,
+      -crop.height / 2,
       crop.width,
       crop.height
     );
@@ -89,13 +94,24 @@ const Home = () => {
               onChange={handleImageChange}
               ref={inputRef}
             />
+            <h3>Rotate image</h3>
+            <input
+              type="range"  //new add
+              id="rotation"
+              min="0"
+              max="360"
+              step="1"
+              value={rotation}
+              onChange={handleRotationChange}
+            />
             {selectedImage && (
               <ReactCrop
                 crop={crop}
                 onChange={(newCrop) => setCrop(newCrop)}
                 onComplete={handleCropComplete}
+                
               >
-                <img ref = {imageRef}src={selectedImage} alt="" />
+                <img ref={imageRef} src={selectedImage} alt="" />
               </ReactCrop>
             )}
           </Grid.Column>
@@ -104,8 +120,8 @@ const Home = () => {
               <>
                 <h2>Cropped Image:</h2>
                 <Button onClick={handleDownload}>Download</Button>
-                <div>
-                  <img src={croppedImage} alt="Cropped" />
+                <div className="croppedimg">
+                  <img src={croppedImage} rotation={rotation} style={{ transform: `rotate(${rotation}deg)` }} alt="Cropped" />
                 </div>
               </>
             )}
