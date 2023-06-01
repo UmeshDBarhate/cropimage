@@ -5,7 +5,12 @@ import { Button, Divider, Grid, Segment } from "semantic-ui-react";
 import "../App.css";
 
 const Home = () => {
-  const [crop, setCrop] = useState({ aspect: 1 / 16 });
+  const[aspect,setAspect]=useState(true)
+  const [crop, setCrop] = useState({  unit: '%',
+  width: 50,
+  height: 50,
+  x: 25,
+  y: 25 });
   const [selectedImage, setSelectedImage] = useState(null);
   const [rotation, setRotation] = useState(0);
   const [croppedImage, setCroppedImage] = useState(null);
@@ -105,12 +110,14 @@ const Home = () => {
               value={rotation}
               onChange={handleRotationChange}
             />
+            <br />
+            <Button onClick={()=>setAspect(!aspect)}>change aspect {aspect?"1/1":"16/9"}</Button>
             {selectedImage && (
               <ReactCrop
                 crop={crop}
                 onChange={(newCrop) => setCrop(newCrop)}
                 onComplete={handleCropComplete}
-                
+                aspect={aspect?16/9:1/1}
               >
                 <img rotation={rotation} style={{ transform: `rotate(${rotation}deg)` }} ref={imageRef} src={selectedImage} alt="" />
               </ReactCrop>
@@ -136,6 +143,7 @@ const Home = () => {
 };
 
 export default Home;
+
 
 // <div>
 //       <h1>Image Crop Application</h1>
