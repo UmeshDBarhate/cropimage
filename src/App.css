@@ -6,3 +6,19 @@
   margin-left: 3rem;
 }
 
+.resize-image-box{
+  margin-right: 0rem;
+}
+.resize-option-box{
+  display: flex;
+}
+.dropdown-box{
+  margin-top: 2rem;
+  margin-left: 2rem;
+}
+.resize-image-btn{
+  margin-top:2rem;
+  margin-left:11rem;
+  justify-content: center;
+  align-items: center;
+}

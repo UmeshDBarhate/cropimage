@@ -1,8 +1,9 @@
 import React, { useState, useRef } from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import { Button, Divider, Grid, Segment } from "semantic-ui-react";
+import { Button, Divider, Grid, Segment,Image } from "semantic-ui-react";
 import "../App.css";
+import ResizeImg from "./ResizeImg";
 
 const Home = () => {
   const[aspect,setAspect]=useState(true)
@@ -39,7 +40,7 @@ const Home = () => {
     const img1 = imageRef.current;
 
     console.log(img1.naturalWidth, img1.width, img1.naturalHeight, img1.height);
-    console.log(crop.x);
+    console.log(crop);
     const canvas = document.createElement("canvas");
     const scaleX = img1.naturalWidth / img1.width;
     const scaleY = img1.naturalHeight / img1.height;
@@ -79,6 +80,7 @@ const Home = () => {
     downloadLink.click();
     document.body.removeChild(downloadLink);
   };
+ 
 
   return (
     <>
@@ -129,15 +131,16 @@ const Home = () => {
                 <h2>Cropped Image:</h2>
                 <Button onClick={handleDownload}>Download</Button>
                 <div className="croppedimg">
-                  <img src={croppedImage}  alt="Cropped" />
+                  <img src={croppedImage} alt="cropped"/>
                 </div>
               </>
             )}
           </Grid.Column>
         </Grid>
-
         <Divider vertical></Divider>
       </Segment>
+      {crop.width>50?(<ResizeImg croppedImage={croppedImage} crop={crop} />):(<></>)}   
+      
     </>
   );
 };
